@@ -3,18 +3,15 @@ module.exports = app => {
 //const { existsOrError, notExistsOrError, equalsOrError } = app.api.validation 
 
     const save = async (request, response) => {
-        const params = request
+        try{
+            const params = request
+            const created = await app.db('guitars').insert({...params.body, price: Number(params.body.price)})
+            
+            response.status(200).json(created)
+        } catch(e) {
+            console.log(e)
+        }
 
-        console.log(params.body)
-        // Example of request
-        // {
-        //     "brands": "arley",
-        //     "type": "eletric",
-        //     "price": 20000
-        // }
-        const created = await app.db('guitars').insert(params.body)
-
-        response.status(200).json(created)
     }
 
     const get = (req, res) => {
